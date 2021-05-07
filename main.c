@@ -37,29 +37,78 @@ typedef struct tagBITMAPINFOHEADER {
 int main(int argc, char *argv[]) {
     FILE *file = fopen(argv[1], "r");
 
-    struct tagBITMAPFILEHEADER header;
-    struct tagBITMAPINFOHEADER info;
+    struct tagBITMAPFILEHEADER headerFile;
+    struct tagBITMAPINFOHEADER headerInfo;
 
     if(file != NULL){
-        fread(&header.bfType, 2, 1, file);
-        printf("bfType: %c%c", header.bfType[0], header.bfType[1]);
-        fread(&header.bfSize, 4, 1, file);
+        fread(&headerFile.bfType, 2, 1, file);
+        fread(&headerFile.bfSize, 4, 1, file);
+        fread(&headerFile.bfReserved1, 2, 1, file);
+        fread(&headerFile.bfReserved2, 2, 1, file);
+        fread(&headerFile.bfOffBits, 4, 1, file);
+
+        fread(&headerInfo.biSize, 4, 1, file);
+        fread(&headerInfo.biWidth, 4, 1, file);
+        fread(&headerInfo.biHeight, 4, 1, file);
+        fread(&headerInfo.biPlanes, 2, 1, file);
+        fread(&headerInfo.biBitCount, 2, 1, file);
+        fread(&headerInfo.biCompression, 4, 1, file);
+        fread(&headerInfo.biSizeImage, 4, 1, file);
+        fread(&headerInfo.biXPelsPerMeter, 4, 1, file);
+        fread(&headerInfo.biYPelsPerMeter, 4, 1, file);
+        fread(&headerInfo.biClrUsed, 4, 1, file);
+        fread(&headerInfo.biClrImportant, 4, 1, file);
+
+
+        printf("BITMAPFILEHEADER: \n");
+        printf("bfType: %c%c", headerFile.bfType[0], headerFile.bfType[1]);
         printf("\n");
         printf("bfSize: ");
-        printf("%" PRIu32, header.bfSize);
-        fread(&header.bfReserved1, 2, 1, file);
+        printf("%" PRIu32, headerFile.bfSize);
         printf("\n");
         printf("bsReserved1: ");
-        printf("%"PRIu16, header.bfReserved1);
-        fread(&header.bfReserved2, 2, 1, file);
+        printf("%"PRIu16, headerFile.bfReserved1);
         printf("\n");
         printf("bsReserved2: ");
-        printf("%"PRIu16, header.bfReserved2);
-        fread(&header.bfOffBits, 4, 1, file);
+        printf("%"PRIu16, headerFile.bfReserved2);
         printf("\n");
         printf("bfOffBits: ");
-        printf("%" PRIu32, header.bfOffBits);
+        printf("%" PRIu32, headerFile.bfOffBits);
 
+        printf("\n\n");
+        printf("BITMAPINFOHEADER: \n");
+        printf("biSize: ");
+        printf("%"PRIu32, headerInfo.biSize);
+        printf("\n");
+        printf("biWidth: ");
+        printf("%d", headerInfo.biWidth);
+        printf("\n");
+        printf("biHeight: ");
+        printf("%d", headerInfo.biHeight);
+        printf("\n");
+        printf("biPlanes: ");
+        printf("%"PRIu16, headerInfo.biPlanes);
+        printf("\n");
+        printf("biBitCount: ");
+        printf("%"PRIu16, headerInfo.biBitCount);
+        printf("\n");
+        printf("biCompression: ");
+        printf("%"PRIu32, headerInfo.biCompression);
+        printf("\n");
+        printf("biSizeImage: ");
+        printf("%"PRIu32, headerInfo.biSizeImage);
+        printf("\n");
+        printf("biXPelsPerMeter: ");
+        printf("%d", headerInfo.biXPelsPerMeter);
+        printf("\n");
+        printf("biYPelsPerMeter: ");
+        printf("%d", headerInfo.biYPelsPerMeter);
+        printf("\n");
+        printf("biClrUsed: ");
+        printf("%"PRIu32, headerInfo.biClrUsed);
+        printf("\n");
+        printf("biClrImportant: ");
+        printf("%"PRIu32, headerInfo.biClrImportant);
     } else {
         printf("Wrong file");
     }
