@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 
     if(file != NULL){
         fread(&header.bfType, 2, 1, file);
-        printf("bfSize: %c%c", header.bfType[0], header.bfType[1]);
+        printf("bfType: %c%c", header.bfType[0], header.bfType[1]);
         fread(&header.bfSize, 4, 1, file);
         printf("\n");
         printf("bfSize: ");
