@@ -144,6 +144,10 @@ int main(int argc, char *argv[]) {
         }
         unsigned char ffs [rowLength];
         fread(ffs, 1, rowLength,file);
+
+        printf("\n");
+        printf("%i", rowLength);
+        printf("\n");
         if(argv[2]!= NULL)fwrite(ffs, 1, rowLength,outfile);
         for(int i=0;i<headerInfo.biHeight;i++)
         {
@@ -177,6 +181,20 @@ int main(int argc, char *argv[]) {
         printf("Blue:\n");
         for (int i = 0; i < 16; ++i) {
             printf("%d-%d: %2.2f%%\n",i*16,i*16+15,rgb[2][i]/div);
+        }
+
+        for(int j = 0; j < rowLength; j++) {
+            printf("%u ", ffs[j]);
+            if ((j+1) %8 == 0) printf("\n");
+        }
+
+        if(argv[3] != NULL) {
+            char *message = NULL;
+            message = malloc(sizeof(argv[3]) * sizeof(char));
+            strcpy(message, argv[3]);
+            int messageLength = strlen(message);
+            //printf("%s", message);
+            //printf("%i", messageLength);
         }
 
     } else{
