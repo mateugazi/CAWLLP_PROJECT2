@@ -133,6 +133,15 @@ int main(int argc, char *argv[]) {
     }
     if(headerInfo.biCompression==0 && headerInfo.biBitCount == 24)
     {
+        if(argv[3] != NULL) {
+            char *message = NULL;
+            message = malloc(sizeof(argv[3]) * sizeof(char));
+            strcpy(message, argv[3]);
+            int messageLength = strlen(message);
+            //printf("%s", message);
+            //printf("%i", messageLength);
+        }
+
         int rowLength = (headerInfo.biBitCount*headerInfo.biWidth+31) / 32;
         rowLength *=4;
         int rowToProcess = headerInfo.biWidth*3;
@@ -186,15 +195,6 @@ int main(int argc, char *argv[]) {
         for(int j = 0; j < rowLength; j++) {
             printf("%u ", ffs[j]);
             if ((j+1) %8 == 0) printf("\n");
-        }
-
-        if(argv[3] != NULL) {
-            char *message = NULL;
-            message = malloc(sizeof(argv[3]) * sizeof(char));
-            strcpy(message, argv[3]);
-            int messageLength = strlen(message);
-            //printf("%s", message);
-            //printf("%i", messageLength);
         }
 
     } else{
