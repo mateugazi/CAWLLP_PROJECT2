@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,9 +36,9 @@ typedef struct tagBITMAPINFOHEADER {
 } BITMAPINFOHEADER, *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
 int main(int argc, char *argv[]) {
-    FILE *file = fopen(argv[1], "r");
+    FILE *file = fopen(argv[1], "rb");
     FILE *outfile;
-    if(argv[2]!= NULL) outfile = fopen(argv[2], "w");
+    if(argv[2]!= NULL) outfile = fopen(argv[2], "wb");
     struct tagBITMAPFILEHEADER headerFile;
     struct tagBITMAPINFOHEADER headerInfo;
 
