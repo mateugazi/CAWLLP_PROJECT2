@@ -214,10 +214,42 @@ int main(int argc, char *argv[]) {
                        printf("%d ",f);
                         fseek ( outfile , headerFile.bfOffBits +( i*8 + k) , SEEK_SET );
                         *x = *x&f;
-                       // fwrite(x, 1, sizeof(unsigned char),outfile);
+                        fwrite(x, 1, sizeof(unsigned char),outfile);
                     }
 
 
+            }
+
+            printf("decode?");
+            char answer = 'y';
+            //scanf("%c", answer);
+            if(answer == 'y') {
+//                unsigned char arr[100];
+//                fread(arr, sizeof (arr), 1,outfile);
+//                printf("\n");
+//                printf("%s", arr);
+//                printf("\n");
+                char decodedMessage[messageLength];
+                fclose(outfile);
+                outfile = fopen(argv[2], "rb");
+                fseek ( outfile , headerFile.bfOffBits , SEEK_SET );
+
+                for(int i = 0; i < messageLength; i++) {
+                    unsigned char tmp = 0;
+                    unsigned char *x = &tmp;
+
+
+                    for (int k = 0; k<8;k++) {
+                        fread(x, 1, sizeof(unsigned char),outfile);
+//                        unsigned char f = ((x & ( 1 << k )) >> k);
+//                        f = f & 1;
+                        *x = *x & 1;
+
+                        printf("%d ", *x);
+                    }
+
+
+                }
             }
         }
 
