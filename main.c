@@ -133,14 +133,7 @@ int main(int argc, char *argv[]) {
     }
     if(headerInfo.biCompression==0 && headerInfo.biBitCount == 24)
     {
-        if(argv[3] != NULL) {
-            char *message = NULL;
-            message = malloc(sizeof(argv[3]) * sizeof(char));
-            strcpy(message, argv[3]);
-            int messageLength = strlen(message);
-            //printf("%s", message);
-            //printf("%i", messageLength);
-        }
+
 
         int rowLength = (headerInfo.biBitCount*headerInfo.biWidth+31) / 32;
         rowLength *=4;
@@ -195,6 +188,37 @@ int main(int argc, char *argv[]) {
         for(int j = 0; j < rowLength; j++) {
             printf("%u ", ffs[j]);
             if ((j+1) %8 == 0) printf("\n");
+        }
+
+    printf("\n");
+        if(argv[3] != NULL) {
+            fseek ( outfile , headerFile.bfOffBits , SEEK_SET );
+            char *message = NULL;
+            message = malloc(sizeof(argv[3]) * sizeof(char));
+            strcpy(message, argv[3]);
+            int messageLength = strlen(message);
+            //printf("%s", message);
+            //printf("%i", messageLength);
+
+            for(int i = 0; i < messageLength; i++) {
+
+                unsigned char tmp = 0;
+                unsigned char *x = &tmp;
+
+
+                    for (int k = 0; k<8;k++) {
+                        fread(x, 1, sizeof(unsigned char),outfile);
+
+                        unsigned char f = ((message[i] & ( 1 << k )) >> k);
+                        f = f | 254;
+                       printf("%d ",f);
+                        fseek ( outfile , headerFile.bfOffBits +( i*8 + k) , SEEK_SET );
+                        *x = *x&f;
+                       // fwrite(x, 1, sizeof(unsigned char),outfile);
+                    }
+
+
+            }
         }
 
     } else{
