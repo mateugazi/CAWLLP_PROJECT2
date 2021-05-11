@@ -1,4 +1,4 @@
-
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -185,13 +185,15 @@ int main(int argc, char *argv[]) {
             printf("%d-%d: %2.2f%%\n",i*16,i*16+15,rgb[2][i]/div);
         }
 
-        for(int j = 0; j < rowLength; j++) {
-            printf("%u ", ffs[j]);
-            if ((j+1) %8 == 0) printf("\n");
-        }
+//        for(int j = 0; j < rowLength; j++) {
+//         //   printf("%u ", ffs[j]);
+//            if ((j+1) %8 == 0) printf("\n");
+//        }
 
     printf("\n");
         if(argv[3] != NULL) {
+            fclose(outfile);
+            outfile = fopen(argv[2], "r+b");
             fseek ( outfile , headerFile.bfOffBits , SEEK_SET );
             char *message = NULL;
             message = malloc(sizeof(argv[3]) * sizeof(char));
@@ -200,18 +202,20 @@ int main(int argc, char *argv[]) {
             //printf("%s", message);
             //printf("%i", messageLength);
 
+
             for(int i = 0; i < messageLength; i++) {
 
                 unsigned char tmp = 0;
                 unsigned char *x = &tmp;
 
 
-                    for (int k = 0; k<8;k++) {
+
+                for (int k = 0; k<8;k++) {
                         fread(x, 1, sizeof(unsigned char),outfile);
 
                         unsigned char f = ((message[i] & ( 1 << k )) >> k);
                         f = f | 254;
-                       printf("%d ",f);
+                       //printf("%d ",f);
                         fseek ( outfile , headerFile.bfOffBits +( i*8 + k) , SEEK_SET );
                         *x = *x&f;
                         fwrite(x, 1, sizeof(unsigned char),outfile);
@@ -221,23 +225,30 @@ int main(int argc, char *argv[]) {
             }
 
             printf("decode?");
-            char answer = 'y';
-            //scanf("%c", answer);
-            if(answer == 'y') {
+            char answer;
+            scanf("%s", &answer);
+            if( answer == 'y') {
 //                unsigned char arr[100];
 //                fread(arr, sizeof (arr), 1,outfile);
 //                printf("\n");
 //                printf("%s", arr);
 //                printf("\n");
                 char decodedMessage[messageLength];
+                for(int j = 0; j < messageLength; j++) {
+                    decodedMessage[j] = 0;
+                }
+
+                decodedMessage[messageLength] = '\0';
+
                 fclose(outfile);
                 outfile = fopen(argv[2], "rb");
-                fseek ( outfile , headerFile.bfOffBits , SEEK_SET );
+                fseek ( outfile , headerFile.bfOffBits, SEEK_SET );
 
                 for(int i = 0; i < messageLength; i++) {
                     unsigned char tmp = 0;
                     unsigned char *x = &tmp;
 
+                    char POTEGA=1;
 
                     for (int k = 0; k<8;k++) {
                         fread(x, 1, sizeof(unsigned char),outfile);
@@ -245,11 +256,19 @@ int main(int argc, char *argv[]) {
 //                        f = f & 1;
                         *x = *x & 1;
 
-                        printf("%d ", *x);
+
+                        decodedMessage[i] += *x * POTEGA;
+                        POTEGA *=2;
                     }
 
 
                 }
+                printf("\n");
+                printf("%i",messageLength);
+
+                printf("\n");
+
+                printf("%s", decodedMessage);
             }
         }
 
